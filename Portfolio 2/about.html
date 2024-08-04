@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Spinx's Creative Corner</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #00ccff;
+            text-shadow: 0 0 5px #00ccff, 0 0 10px #00ccff, 0 0 20px #00ccff;
+        }
+        nav a {
+            color: #ff0066;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2em;
+            position: relative;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            height: 2px;
+            width: 0;
+            background-color: red;
+            transition: width 0.3s ease;
+        }
+        nav a:hover {
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #ff0000;
+            filter: blur(0.5px);
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
+        section {
+            padding: 50px 20px;
+        }
+        .section-title {
+            font-size: 2em;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        footer {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>About Me</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="3darts.html">3D Arts</a>
+            <a href="games.html">Games</a>
+        </nav>
+    </header>
+    <section>
+        <h2 class="section-title">About Me</h2>
+        <div class="content">
+            <p>Hi, I'm Spinx. I love making games and exploring the technical world of coding. This website is my personal space to showcase my 3D arts and the games I have created. Enjoy exploring!</p>
+        </div>
+    </section>
+    <footer>
+        &copy; 2024 Spinx. All rights reserved.
+    </footer>
+</body>
+</html>

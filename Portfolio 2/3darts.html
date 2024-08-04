@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Arts - Spinx's Creative Corner</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #00ccff;
+            text-shadow: 0 0 5px #00ccff, 0 0 10px #00ccff, 0 0 20px #00ccff;
+        }
+        nav a {
+            color: #ff0066;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2em;
+            position: relative;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            height: 2px;
+            width: 0;
+            background-color: red;
+            transition: width 0.3s ease;
+        }
+        nav a:hover {
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #ff0000;
+            filter: blur(0.5px);
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
+        section {
+            padding: 50px 20px;
+        }
+        .section-title {
+            font-size: 2em;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        .model {
+            margin-bottom: 40px;
+            cursor: pointer;
+        }
+        .model img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .model-title {
+            font-size: 1.5em;
+            color: #00ccff;
+            margin: 10px 0;
+        }
+        .model-description {
+            font-size: 1em;
+            color: #999;
+        }
+        .viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .viewer canvas {
+            max-width: 80%;
+            max-height: 80%;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: white;
+            cursor: pointer;
+        }
+        footer {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+    <header>
+        <h1>3D Arts</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Me</a>
+            <a href="games.html">Games</a>
+        </nav>
+    </header>
+    <section>
+        <h2 class="section-title">3D Arts</h2>
+        <div class="content">
+            <div class="model" onclick="openViewer('3d arts/3d models/Anvil.gltf')">
+                <img src="3d arts/images/Anvil.png" alt="Anvil Model">
+                <div class="model-title">Anvil</div>
+                <div class="model-description">A detailed 3D model of an anvil. Click to view in 3D.</div>
+            </div>
+            <div class="model" onclick="openViewer('path/to/your/second-model.gltf')">
+                <img src="path/to/your/second-model-image.jpg" alt="Second Model">
+                <div class="model-title">Second Model</div>
+                <div class="model-description">Description of the second model. Click to view in 3D.</div>
+            </div>
+            <div class="model" onclick="openViewer('path/to/your/third-model.gltf')">
+                <img src="path/to/your/third-model-image.jpg" alt="Third Model">
+                <div class="model-title">Third Model</div>
+                <div class="model-description">Description of the third model. Click to view in 3D.</div>
+            </div>
+        </div>
+    </section>
+    <div class="viewer" id="viewer">
+        <span class="close-btn" onclick="closeViewer()">×</span>
+        <div id="canvas-container"></div>
+    </div>
+    <footer>
+        &copy; 2024 Spinx. All rights reserved.
+    </footer>
+    <script>
+        let renderer, scene, camera, light, loader;
+
+        function initViewer() {
+            const canvasContainer = document.getElementById('canvas-container');
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            canvasContainer.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(1, 1, 1).normalize();
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+            scene.add(ambientLight);
+
+            loader = new THREE.GLTFLoader();
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function openViewer(modelPath) {
+            const viewer = document.getElementById('viewer');
+            viewer.style.display = 'flex';
+
+            loader.load(modelPath, function(gltf) {
+                while(scene.children.length > 0) { 
+                    scene.remove(scene.children[0]); 
+                }
+                scene.add(gltf.scene);
+                animate();
+            });
+        }
+
+        function closeViewer() {
+            const viewer = document.getElementById('viewer');
+            viewer.style.display = 'none';
+            const canvasContainer = document.getElementById('canvas-container');
+            while (canvasContainer.firstChild) {
+                canvasContainer.removeChild(canvasContainer.firstChild);
+            }
+            initViewer();  // Reinitialize the viewer for the next model load
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Initialize viewer on page load
+        window.onload = initViewer;
+    </script>
+</body>
+</html>
